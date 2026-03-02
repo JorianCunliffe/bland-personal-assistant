@@ -1,0 +1,52 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Tenant {
+  tenant_id            String       @id @default(uuid())
+  business_name        String
+  admin_email          String       @unique
+  timezone             String       @default("UTC")
+  stripe_customer_id   String       @unique
+  twilio_sub_sid       String       @unique
+  twilio_phone_number  String       @unique
+  bland_vector_id      String?
+  bland_pathway_id     String?
+  google_calendar_id   String?
+  google_refresh_token String?
+  call_records         CallRecord[]
+  bookings             Booking[]
+}
+
+model CallRecord {
+  call_record_id String    @id @default(uuid())
+  tenant_id      String
+  bland_call_id  String    @unique
+  caller_number  String
+  transcript     String?   @db.Text
+  audio_url      String?
+  status         String    // "booked", "message_left", "faq_only"
+  
+  tenant         Tenant    @relation(fields: [tenant_id], references: [tenant_id])
+  bookings       Booking[]
+}
+
+model Booking {
+  booking_id      String     @id @default(uuid())
+  tenant_id       String
+  call_record_id  String
+  google_event_id String     @unique
+  meet_link       String?
+  meeting_type    String     // "video" or "office"
+  start_time      DateTime
+  
+  tenant          Tenant     @relation(fields: [tenant_id], references: [tenant_id])
+  call_record     CallRecord @relation(fields: [call_record_id], references: [call_record_id])
+
+  @@unique([tenant_id, start_time])
+}

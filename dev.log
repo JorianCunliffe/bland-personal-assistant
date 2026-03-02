@@ -1,0 +1,12 @@
+﻿
+> bland-personal-assistant@0.1.0 dev
+> next dev
+
+Ôû▓ Next.js 16.1.6 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://192.168.1.99:3000
+- Environments: .env
+
+Ô£ô Starting...
+Ô£ô Ready in 757ms
+ GET / 200 in 1731ms (compile: 1638ms, render: 93ms)

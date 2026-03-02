@@ -1,0 +1,12 @@
+﻿.next/types/validator.ts(48,31): error TS2344: Type 'typeof import("C:/Users/joria/antigravity/bland-personal-assistant/app/api/v1/tenants/[id]/kb/route")' does not satisfy the constraint 'RouteHandlerConfig<"/api/v1/tenants/[id]/kb">'.
+  Types of property 'PATCH' are incompatible.
+    Type '(req: Request, { params }: { params: { id: string; }; }) => Promise<NextResponse<{ success: boolean; vector_id: string | null; }> | NextResponse<{ error: any; }>>' is not assignable to type '(request: NextRequest, context: { params: Promise<{ id: string; }>; }) => void | Response | Promise<void | Response>'.
+      Types of parameters '__1' and 'context' are incompatible.
+        Type '{ params: Promise<{ id: string; }>; }' is not assignable to type '{ params: { id: string; }; }'.
+          Types of property 'params' are incompatible.
+            Property 'id' is missing in type 'Promise<{ id: string; }>' but required in type '{ id: string; }'.
+app/api/v1/tenants/route.ts(3,24): error TS2307: Cannot find module '@/lib/stripe' or its corresponding type declarations.
+app/api/v1/tenants/route.ts(4,56): error TS2307: Cannot find module '@/lib/twilio' or its corresponding type declarations.
+app/api/v1/webhooks/post-call/route.ts(3,24): error TS2307: Cannot find module '@/lib/stripe' or its corresponding type declarations.
+app/page.tsx(1,28): error TS2307: Cannot find module '@/components/OnboardingForm' or its corresponding type declarations.
+prisma.config.ts(4,30): error TS2307: Cannot find module 'prisma/config' or its corresponding type declarations.
