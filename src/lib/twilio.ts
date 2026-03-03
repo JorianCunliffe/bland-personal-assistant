@@ -12,17 +12,17 @@ export async function createSubaccount(businessName: string) {
 }
 
 export async function provisionPhoneNumber(subaccountSid: string) {
-    // Search for US mobile numbers instead of local numbers with a specific area code
-    const mobileNumbers = await twilioClient.availablePhoneNumbers('US').mobile.list({
+    // Search for available Australian (AU) Mobile Numbers (04xx)
+    const availableNumbers = await twilioClient.availablePhoneNumbers('AU').mobile.list({
         limit: 1,
     });
 
-    if (mobileNumbers.length === 0) {
+    if (availableNumbers.length === 0) {
         throw new Error('No mobile numbers available');
     }
 
     const number = await twilioClient.incomingPhoneNumbers.create({
-        phoneNumber: mobileNumbers[0].phoneNumber,
+        phoneNumber: availableNumbers[0].phoneNumber,
     });
 
     return number.phoneNumber;
