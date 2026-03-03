@@ -37,13 +37,14 @@ export async function POST(req: Request) {
 
         // Report usage to Stripe (Metered Billing)
         // 1 AI minute = 1 usage event in Stripe. Assuming you've created a meter in Stripe:
-        await stripe.billing.meterEvents.create({
-            event_name: 'call_minutes', // Needs to match your Stripe configuration
-            payload: {
-                value: call_length_minutes.toString(),
-                stripe_customer_id: tenant.stripe_customer_id,
-            },
-        });
+        // await stripe.billing.meterEvents.create({
+        //     event_name: 'call_minutes', // Needs to match your Stripe configuration
+        //     payload: {
+        //         value: call_length_minutes.toString(),
+        //         stripe_customer_id: tenant.stripe_customer_id,
+        //     },
+        // });
+        console.log(`[STUB] Would report ${call_length_minutes} mins to Stripe for customer ${tenant.stripe_customer_id}`);
 
         return NextResponse.json({ success: true, callRecord });
     } catch (error: any) {

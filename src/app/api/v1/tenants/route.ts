@@ -16,11 +16,12 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
         }
 
-        // 1. Create Stripe Customer
-        const stripeCustomer = await stripe.customers.create({
-            email: admin_email,
-            name: business_name,
-        });
+        // 1. Create Stripe Customer (Stubbed out for now)
+        // const stripeCustomer = await stripe.customers.create({
+        //     email: admin_email,
+        //     name: business_name,
+        // });
+        const dummyStripeCustomerId = `cus_dummy_${Date.now()}`;
 
         // 2. Provision Twilio Subaccount & Number
         const twilioSub = await createSubaccount(business_name);
@@ -31,7 +32,7 @@ export async function POST(req: Request) {
             data: {
                 business_name,
                 admin_email,
-                stripe_customer_id: stripeCustomer.id,
+                stripe_customer_id: dummyStripeCustomerId,
                 twilio_sub_sid: twilioSub.sid,
                 twilio_phone_number: phoneNumber,
             },
