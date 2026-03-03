@@ -21,8 +21,15 @@ export async function provisionPhoneNumber(subaccountSid: string) {
         throw new Error('No mobile numbers available');
     }
 
+    // Australian numbers require an Address Sid (A Twilio Address matching the business location)
+    const addressSid = process.env.TWILIO_ADDRESS_SID;
+    if (!addressSid) {
+        throw new Error("TWILIO_ADDRESS_SID environment variable is missing. It is required for AU numbers.");
+    }
+
     const number = await twilioClient.incomingPhoneNumbers.create({
         phoneNumber: availableNumbers[0].phoneNumber,
+        addressSid: addressSid,
     });
 
     return number.phoneNumber;
