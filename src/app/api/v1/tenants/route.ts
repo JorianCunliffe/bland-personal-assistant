@@ -10,9 +10,9 @@ export const dynamic = 'force-dynamic';
 export async function POST(req: Request) {
     try {
         const body = await req.json();
-        const { business_name, admin_email, area_code } = body;
+        const { business_name, admin_email } = body;
 
-        if (!business_name || !admin_email || !area_code) {
+        if (!business_name || !admin_email) {
             return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
         }
 
@@ -25,7 +25,7 @@ export async function POST(req: Request) {
 
         // 2. Provision Twilio Subaccount & Number
         const twilioSub = await createSubaccount(business_name);
-        const phoneNumber = await provisionPhoneNumber(twilioSub.sid, area_code);
+        const phoneNumber = await provisionPhoneNumber(twilioSub.sid);
 
         // 3. Save to Database
         const tenant = await prisma.tenant.create({

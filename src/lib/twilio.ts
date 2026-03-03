@@ -11,18 +11,18 @@ export async function createSubaccount(businessName: string) {
     });
 }
 
-export async function provisionPhoneNumber(subaccountSid: string, areaCode: string) {
-    const localNumbers = await twilioClient.availablePhoneNumbers('US').local.list({
-        areaCode: parseInt(areaCode),
+export async function provisionPhoneNumber(subaccountSid: string) {
+    // Search for US mobile numbers instead of local numbers with a specific area code
+    const mobileNumbers = await twilioClient.availablePhoneNumbers('US').mobile.list({
         limit: 1,
     });
 
-    if (localNumbers.length === 0) {
-        throw new Error('No numbers available for this area code');
+    if (mobileNumbers.length === 0) {
+        throw new Error('No mobile numbers available');
     }
 
     const number = await twilioClient.incomingPhoneNumbers.create({
-        phoneNumber: localNumbers[0].phoneNumber,
+        phoneNumber: mobileNumbers[0].phoneNumber,
     });
 
     return number.phoneNumber;
