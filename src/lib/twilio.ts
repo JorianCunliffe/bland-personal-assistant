@@ -22,10 +22,8 @@ export async function provisionPhoneNumber(subaccountSid: string) {
     }
 
     // Australian numbers require an Address Sid (A Twilio Address matching the business location)
-    const addressSid = process.env.TWILIO_ADDRESS_SID;
-    if (!addressSid) {
-        throw new Error("TWILIO_ADDRESS_SID environment variable is missing. It is required for AU numbers.");
-    }
+    // We fall back to the provided Address SID for Cairns Sharehouse if the env var isn't loaded
+    const addressSid = process.env.TWILIO_ADDRESS_SID || 'AD15634168e0008f5d8ee9db4156224c1a';
 
     const number = await twilioClient.incomingPhoneNumbers.create({
         phoneNumber: availableNumbers[0].phoneNumber,
