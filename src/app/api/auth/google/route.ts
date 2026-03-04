@@ -9,7 +9,8 @@ export async function GET(request: Request) {
     }
 
     const clientId = process.env.GOOGLE_CLIENT_ID;
-    const redirectUri = process.env.GOOGLE_REDIRECT_URI || `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/auth/google/callback`;
+    const appUrl = (process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000').replace(/\/$/, "");
+    const redirectUri = process.env.GOOGLE_REDIRECT_URI || `${appUrl}/api/auth/google/callback`;
 
     if (!clientId || !redirectUri) {
         return NextResponse.json({ error: 'Missing OAuth configuration' }, { status: 500 });
