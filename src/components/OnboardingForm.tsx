@@ -11,7 +11,8 @@ export default function OnboardingForm() {
     const [form, setForm] = useState({
         business_name: "",
         admin_email: "",
-        faq_text: ""
+        faq_text: "",
+        existing_phone_number: ""
     });
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -29,7 +30,8 @@ export default function OnboardingForm() {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     business_name: form.business_name,
-                    admin_email: form.admin_email
+                    admin_email: form.admin_email,
+                    existing_phone_number: form.existing_phone_number ? form.existing_phone_number : undefined
                 })
             });
             const data = await res.json();
@@ -57,7 +59,7 @@ export default function OnboardingForm() {
             <div className="text-center p-8 bg-green-50 rounded-2xl border border-green-200">
                 <h3 className="text-2xl font-bold text-green-800 mb-2">You&apos;re All Set!</h3>
                 <p className="text-green-700">Your AI Receptionist has been successfully provisioned.</p>
-                <p className="text-sm text-green-600 mt-4 mb-6">We&apos;ve purchased a mobile number for your assistant. You will receive an email confirmation shortly.</p>
+                <p className="text-sm text-green-600 mt-4 mb-6">Your assistant is ready! You will receive an email confirmation shortly.</p>
 
                 <div className="p-6 bg-white rounded-xl shadow border border-gray-100">
                     <h4 className="font-semibold text-gray-800 mb-2">Next Step: Connect Your Calendar</h4>
@@ -101,10 +103,8 @@ export default function OnboardingForm() {
 
             <div className="grid grid-cols-2 gap-4">
                 <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
-                    <div className="w-full px-4 py-2 border rounded-xl bg-gray-50 text-gray-500 text-sm flex items-center">
-                        A mobile number will be provisioned.
-                    </div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Testing / Existing Number (Optional)</label>
+                    <input type="text" name="existing_phone_number" value={form.existing_phone_number} onChange={handleChange} className="w-full px-4 py-2 border rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition" placeholder="Leave blank to buy new, or +614..." />
                 </div>
                 <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Calendar Setup</label>

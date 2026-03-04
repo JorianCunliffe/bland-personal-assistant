@@ -10,7 +10,7 @@ export const dynamic = 'force-dynamic';
 export async function POST(req: Request) {
     try {
         const body = await req.json();
-        const { business_name, admin_email } = body;
+        const { business_name, admin_email, existing_phone_number } = body;
 
         if (!business_name || !admin_email) {
             return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
@@ -23,9 +23,15 @@ export async function POST(req: Request) {
         // });
         const dummyStripeCustomerId = `cus_dummy_${Date.now()}`;
 
-        // 2. Provision Twilio Subaccount & Number
-        const twilioSub = await createSubaccount(business_name);
-        const phoneNumber = await provisionPhoneNumber(twilioSub.sid);
+        // 2. Provision Twilio Subaccount & Number (or use existing)
+        let twilioSubSid = 'existing_master_account';
+        let phoneNumber = existing_phone_number;
+
+        if (!existing_phone_number) {
+            const twilioSub = await createSubaccount(business_name);
+            twilioSubSid = twilioSub.sid;
+            phoneNumber = await provisionPhoneNumber(twilioSubSid);
+        }
 
         // 3. Save to Database
         const tenant = await prisma.tenant.create({
@@ -33,7 +39,7 @@ export async function POST(req: Request) {
                 business_name,
                 admin_email,
                 stripe_customer_id: dummyStripeCustomerId,
-                twilio_sub_sid: twilioSub.sid,
+                twilio_sub_sid: twilioSubSid,
                 twilio_phone_number: phoneNumber,
             },
         });
