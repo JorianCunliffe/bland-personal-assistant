@@ -23,11 +23,15 @@ export async function provisionPhoneNumber(subaccountSid: string) {
 
     // Australian numbers require an Address Sid (A Twilio Address matching the business location)
     // We fall back to the provided Address SID for Cairns Sharehouse if the env var isn't loaded
-    const addressSid = process.env.TWILIO_ADDRESS_SID || 'AD15634168e0008f5d8ee9db4156224c1a';
+    const addressSid = process.env.TWILIO_ADDRESS_SID || 'ADbfb1c3d93e10935ea7b44d8f0f478c57';
+
+    // Australian Mobile Numbers also require a Regulatory Bundle SID
+    const bundleSid = process.env.TWILIO_BUNDLE_SID || 'BUbcfa74bfd77c8581383c68efea2566e6';
 
     const number = await twilioClient.incomingPhoneNumbers.create({
         phoneNumber: availableNumbers[0].phoneNumber,
         addressSid: addressSid,
+        bundleSid: bundleSid,
     });
 
     return number.phoneNumber;
