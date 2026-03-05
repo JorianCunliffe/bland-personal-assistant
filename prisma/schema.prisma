@@ -19,8 +19,28 @@ model Tenant {
   bland_pathway_id     String?
   google_calendar_id   String?
   google_refresh_token String?
+  prompt               String?   @db.Text  // AI receptionist system prompt/instructions
+  working_hours        String?   @db.Text  // JSON string e.g. {"mon":"9:00-17:00","tue":"9:00-17:00",...}
+  transfer_number      String?             // Phone number to transfer calls to (E.164)
+  calendar_link        String?             // Public booking page URL
+  custom_settings      Json?               // Flexible JSON for any other tenant-specific config
   call_records         CallRecord[]
   bookings             Booking[]
+  contacts             Contact[]
+}
+
+model Contact {
+  contact_id    String    @id @default(uuid())
+  tenant_id     String
+  phone_number  String
+  name          String?
+  notes         String?   @db.Text
+  created_at    DateTime  @default(now())
+  updated_at    DateTime  @updatedAt
+
+  tenant        Tenant    @relation(fields: [tenant_id], references: [tenant_id])
+
+  @@unique([tenant_id, phone_number])
 }
 
 model CallRecord {
